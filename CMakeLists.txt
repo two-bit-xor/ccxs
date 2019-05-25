@@ -15,7 +15,6 @@ if (APPLE)
     include_directories(${OPENSSL_INCLUDE_DIRS})
 endif ()
 
-
 add_library(zf_log_lib STATIC IMPORTED)
 set_target_properties(zf_log_lib PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/install/zf_log/0.4.0/lib/libzf_log.a)
 
@@ -23,7 +22,7 @@ add_library(cjson_lib STATIC IMPORTED)
 set_target_properties(cjson_lib PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/install/cJSON/1.7.11/lib/libcjson.a)
 include_directories(install/zf_log/0.4.0/include install/cJSON/1.7.11/include)
 
-add_executable(cJSON_example main.c)
+add_executable(cJSON_example main.c src/binance-depth.c)
 target_link_libraries(cJSON_example cjson_lib zf_log_lib)
 
 
