@@ -6,24 +6,11 @@
 #include <stdbool.h>
 #include "cjson/cJSON.h"
 #include "zf_log.h"
-
-typedef struct order {
-    double price;
-    double volume;
-} Order;
-#define EMPTY_ORDER (Order){.price=-1.0, .volume=-1.0}
-
-typedef struct {
-    const char *market;
-    double time;
-    long id;
-    Order bids[100];
-    Order asks[100];
-} OrderBookLevel2;
+#include "binance-depth.h"
 
 bool is_valid_string(const cJSON *node);
 
-int parse_order_node(cJSON *root_node, char *order_side, Order orders[]) {
+int binance_parse_order_node(cJSON *root_node, char *order_side, Order *orders) {
     const cJSON *order_node = NULL;
     const cJSON *order_book_node = cJSON_GetObjectItemCaseSensitive(root_node, order_side);
 
@@ -50,7 +37,7 @@ int end(cJSON *node_to_free, int status) {
     return status;
 }
 
-int parse_depth_update(const char *const json_string) {
+int binance_parse_depth_update(const char *const json_string) {
     int status = 0;
     cJSON *root_node = cJSON_Parse(json_string);
     if (root_node == NULL) {
@@ -82,10 +69,9 @@ int parse_depth_update(const char *const json_string) {
         order_book.market = market->valuedouble;
     }
 
-    parse_order_node(root_node, "b", order_book.bids);
-    parse_order_node(root_node, "a", order_book.asks);
+    binance_parse_order_node(root_node, "b", order_book.bids);
+    binance_parse_order_node(root_node, "a", order_book.asks);
 
 
-//    string = cJSON_Print(order_book);
     return end(root_node, status);
 }

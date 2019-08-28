@@ -1,3 +1,2 @@
 
-
-file(COPY test/resources DESTINATION .)
+file(COPY resources DESTINATION .)

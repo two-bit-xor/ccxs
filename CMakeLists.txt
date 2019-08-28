@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 project(cJSON_example C)
 
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_FLAGS "-Wall -Wextra -Werror -std=c11")
 
 find_package(openssl REQUIRED)
 
@@ -22,7 +23,7 @@ add_library(cjson_lib STATIC IMPORTED)
 set_target_properties(cjson_lib PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/install/cJSON/1.7.11/lib/libcjson.a)
 include_directories(install/zf_log/0.4.0/include install/cJSON/1.7.11/include)
 
-add_executable(cJSON_example main.c src/binance-depth.c)
+add_executable(cJSON_example src/main.c src/binance-depth.c src/binance-depth.h)
 target_link_libraries(cJSON_example cjson_lib zf_log_lib)
 
-
+add_subdirectory(test)
