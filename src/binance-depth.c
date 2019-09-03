@@ -4,11 +4,15 @@
 #include <time.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <errno.h>
+
 #include "cjson/cJSON.h"
 #include "zf_log.h"
 #include "binance-depth.h"
 
 bool is_valid_string(const cJSON *node);
+
+double json_to_double(const cJSON *value);
 
 int binance_parse_order_node(cJSON *root_node, char *order_side, Order *orders) {
     const cJSON *order_node = NULL;
@@ -20,14 +24,28 @@ int binance_parse_order_node(cJSON *root_node, char *order_side, Order *orders) 
         cJSON *volume = cJSON_GetArrayItem(order_node, 1);
 
         if (is_valid_string(price) && is_valid_string(volume)) {
-            Order book = {.price=-atof(price->valuestring), .volume=atof(volume->valuestring)};
+            Order book = {.price=json_to_double(price), .amount=json_to_double(volume)};
             orders[i++] = book;
-            ZF_LOGI("%s.price=\"%s\"", order_side, price->valuestring);
-            ZF_LOGI("%s.volume=\"%s\"", order_side, volume->valuestring);
         }
     }
     orders[i] = EMPTY_ORDER;
     return i;
+}
+
+double json_to_double(const cJSON *value) {
+    char *endptr;
+    double d = strtod(value->valuestring, &endptr);
+    if (d == 0) {
+        /* If a conversion error occurred, display a message and exit */
+        if (errno == EINVAL) {
+            printf("Conversion error occurred: %d.\n", errno);
+        }
+
+        if (errno == ERANGE) {
+            printf("The value provided was out of range.\n");
+        }
+    }
+    return d;
 }
 
 bool is_valid_string(const cJSON *node) { return cJSON_IsString(node) && (node->valuestring != NULL); }
@@ -38,6 +56,7 @@ int end(cJSON *node_to_free, int status) {
 }
 
 int binance_parse_depth_update(const char *const json_string) {
+    clock_t t_0 = clock();
     int status = 0;
     cJSON *root_node = cJSON_Parse(json_string);
     if (root_node == NULL) {
@@ -50,28 +69,28 @@ int binance_parse_depth_update(const char *const json_string) {
 
     const cJSON *type = cJSON_GetObjectItemCaseSensitive(root_node, "e");
     if (cJSON_IsString(type) && (type->valuestring != NULL)) {
-        ZF_LOGI("type=\"%s\"", type->valuestring);
         if (strcmp("depthUpdate", type->valuestring) != 0) {
             return end(root_node, 0);
         }
     }
 
-    OrderBookLevel2 order_book;
+    OrderBookLevel2 *order_book = malloc(sizeof(OrderBookLevel2));
     const cJSON *time = cJSON_GetObjectItemCaseSensitive(root_node, "E");
     if (cJSON_IsNumber(time)) {
-        ZF_LOGI("time=\"%f\"", type->valuedouble);
-        order_book.time = type->valuedouble;
+        order_book->time = type->valuedouble;
     }
 
     const cJSON *market = cJSON_GetObjectItemCaseSensitive(root_node, "s");
     if (cJSON_IsString(market) && (market->valuestring != NULL)) {
-        ZF_LOGI("market=\"%s\"", market->valuestring);
-        order_book.market = market->valuedouble;
+        order_book->market = market->valuedouble;
     }
 
-    binance_parse_order_node(root_node, "b", order_book.bids);
-    binance_parse_order_node(root_node, "a", order_book.asks);
+    int bids = binance_parse_order_node(root_node, "b", order_book->bids);
+    int asks = binance_parse_order_node(root_node, "a", order_book->asks);
 
 
+    double t_1 = ((double) clock() - t_0) / CLOCKS_PER_SEC; // in seconds
+    ZF_LOGI("Done in %f seconds bids=%d, asks=%d\n", t_1, bids, asks);
+    free(order_book);
     return end(root_node, status);
 }

@@ -21,9 +21,16 @@ set_target_properties(zf_log_lib PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_D
 
 add_library(cjson_lib STATIC IMPORTED)
 set_target_properties(cjson_lib PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/install/cJSON/1.7.11/lib/libcjson.a)
-include_directories(install/zf_log/0.4.0/include install/cJSON/1.7.11/include)
 
-add_executable(cJSON_example src/main.c src/binance-depth.c src/binance-depth.h)
-target_link_libraries(cJSON_example cjson_lib zf_log_lib)
+add_library(lws_lib STATIC IMPORTED)
+set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/install/libwebsockets/3.1-stable/lib/libwebsockets.dylib)
+
+include_directories(
+        ${PROJECT_SOURCE_DIR}/install/zf_log/0.4.0/include
+        ${PROJECT_SOURCE_DIR}/install/cJSON/1.7.11/include
+        ${PROJECT_SOURCE_DIR}/install/libwebsockets/3.1-stable/include
+)
+
+add_subdirectory(src)
 
 add_subdirectory(test)
