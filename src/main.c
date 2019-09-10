@@ -3,20 +3,19 @@
 #include <time.h>
 #include <unistd.h>
 #include <pthread.h>
-//#include <libwebsockets/lws-client.h>
 
 #include "cjson/cJSON.h"
-#include "zf_log.h"
-#include "binance-depth.h"
-#include "binance.h"
-#include "bitfinex.h"
+#include "binance/binance.h"
+#include "bitfinex/bitfinex.h"
+#include "ws/client-server-protocol.h"
 
 static int interrupted;
 
-static const struct lws_protocols protocols[] = {
-        {BINANCE_PROTOCOL,  binance_callback,  0, 0, 0, NULL, 0},
-        {BITFINEX_PROTOCOL, bitfinex_callback, 0, 0, 0, NULL, 0},
-        {NULL, NULL,                           0, 0, 0, NULL, 0}
+#define LWS_PLUGIN_STATIC
+
+static const struct lws_protocols client_protocols[] = {
+        LWS_PLUGIN_PROTOCOL_MINIMAL,
+        {NULL, NULL, 0, 0, 0, NULL, 0}
 };
 
 static void
@@ -39,12 +38,16 @@ int main() {
     signal(SIGINT, sigint_handler);
 
     lws_set_log_level(logs, NULL);
-    lwsl_user("LWS minimal ws client SPAM\n");
+    lwsl_user("ccxs 你好！\n");
 
     memset(&info, 0, sizeof info); /* otherwise uninitialized garbage */
-    info.options = LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
-    info.port = CONTEXT_PORT_NO_LISTEN; /* we do not run any server */
-    info.protocols = protocols;
+    info.port = 7681; /* we do not run any server */
+    info.protocols = client_protocols;
+    info.vhost_name = "localhost";
+    info.ws_ping_pong_interval = 60;
+    info.options = LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT |
+                   LWS_SERVER_OPTION_HTTP_HEADERS_SECURITY_BEST_PRACTICES_ENFORCE;
+
 #if defined(LWS_WITH_MBEDTLS)
     /*
          * OpenSSL uses the system trust store.  mbedTLS has to be told which
@@ -59,20 +62,12 @@ int main() {
         return 1;
     }
 
-    binance_connect_client(context);
-    bitfinex_connect_client(context);
-
     while (n >= 0 && !interrupted) {
-        n = lws_service(context, 1000);
+        n = lws_service(context, 100);
     }
 
     lws_context_destroy(context);
 
-//    if (tries == limit && closed == tries) {
-    lwsl_user("Completed\n");
+    lwsl_user("拜拜\n");
     return 0;
-//    }
-
-//    lwsl_err("Failed\n");
-//    return 1;
 }

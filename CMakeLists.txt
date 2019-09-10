@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.14)
 project(cJSON_example C)
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_FLAGS "-Wall -Wextra -Werror -std=c11")
-
+set(CMAKE_C_FLAGS "-Wall -Wextra  -std=c11")
+#-Werror
 find_package(openssl REQUIRED)
 
 if (APPLE)

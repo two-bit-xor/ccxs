@@ -1,3 +1,7 @@
-= cjson-example
+= CCXS
 
-快速反序列化JSON字符串。
+C语言加密货币交换库。
+
+是一个连接到websocket的加密货币交换的C语言库。
+
+它使用<libwebsocket>作为客户端连接并转换订单簿。
