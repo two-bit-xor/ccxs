@@ -18,6 +18,7 @@
 
 #include "../binance/binance.h"
 #include "../bitfinex/bitfinex.h"
+#include "../kraken/kraken.h"
 
 void
 connect_all(const struct per_vhost_data__minimal *vhd);
@@ -165,8 +166,6 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
             break;
 
         case LWS_CALLBACK_CLIENT_RECEIVE:
-            lwsl_user("%s: 收到: %s\n", __func__, in);
-
             if (NULL != wsi_user && NULL != wsi_user->parse_json) {
                 wsi_user->parse_json(in);
             }
@@ -270,6 +269,11 @@ connect_all(const struct per_vhost_data__minimal *vhd) {
                                        LWS_CALLBACK_USER, 1);
     }
     if (bitfinex_connect_client(vhd)) {
+        lws_timed_callback_vh_protocol(vhd->vhost,
+                                       vhd->protocol,
+                                       LWS_CALLBACK_USER, 1);
+    }
+    if (kraken_connect_client(vhd)) {
         lws_timed_callback_vh_protocol(vhd->vhost,
                                        vhd->protocol,
                                        LWS_CALLBACK_USER, 1);
