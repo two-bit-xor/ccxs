@@ -8,7 +8,7 @@ struct client_user_data {
 
     int (*subscribe)(struct lws *wsi);
 
-    char *(*parse_json)(const char *const json_string);
+    char *(*parse_json)(const void *const in);
 };
 
 /* one of these created for each message */

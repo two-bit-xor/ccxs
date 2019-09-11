@@ -19,9 +19,16 @@
 #include "../binance/binance.h"
 #include "../bitfinex/bitfinex.h"
 #include "../kraken/kraken.h"
+#include "../okex/okex.h"
 
 void
 connect_all(const struct per_vhost_data__minimal *vhd);
+
+void
+execute_connect(
+        const struct per_vhost_data__minimal *vhd,
+        int (*fun)(const struct per_vhost_data__minimal *)
+);
 
 /* destroys the message when everyone has had a copy of it */
 
@@ -263,17 +270,18 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
 
 void
 connect_all(const struct per_vhost_data__minimal *vhd) {
-    if (binance_connect_client(vhd)) {
-        lws_timed_callback_vh_protocol(vhd->vhost,
-                                       vhd->protocol,
-                                       LWS_CALLBACK_USER, 1);
-    }
-    if (bitfinex_connect_client(vhd)) {
-        lws_timed_callback_vh_protocol(vhd->vhost,
-                                       vhd->protocol,
-                                       LWS_CALLBACK_USER, 1);
-    }
-    if (kraken_connect_client(vhd)) {
+    execute_connect(vhd, binance_connect_client);
+    execute_connect(vhd, bitfinex_connect_client);
+    execute_connect(vhd, kraken_connect_client);
+    execute_connect(vhd, okex_connect_client);
+}
+
+void
+execute_connect(
+        const struct per_vhost_data__minimal *vhd,
+        int (*fun)(const struct per_vhost_data__minimal *)
+) {
+    if (fun(vhd)) {
         lws_timed_callback_vh_protocol(vhd->vhost,
                                        vhd->protocol,
                                        LWS_CALLBACK_USER, 1);

@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.14)
-project(cJSON_example C)
+project(ccxs C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "-Wall -Wextra  -std=c11")
 #-Werror
 find_package(openssl REQUIRED)
+find_package(ZLIB REQUIRED)
 
 if (APPLE)
     message(STATUS "APPLE=${APPLE}")
