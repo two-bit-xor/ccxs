@@ -20,6 +20,7 @@
 #include "../bitfinex/bitfinex.h"
 #include "../kraken/kraken.h"
 #include "../okex/okex.h"
+#include "../bitstamp/bitstamp.h"
 
 void
 connect_all(const struct per_vhost_data__minimal *vhd);
@@ -42,7 +43,7 @@ __minimal_destroy_message(void *_msg) {
 }
 
 /*
- * websocket_write_back: 将字符串数据写入目标.
+ * websocket_write_back: 将字符串数据写入目标。
  */
 int
 websocket_write_back(struct lws *wsi_in, const char *str) {
@@ -173,8 +174,16 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
             break;
 
         case LWS_CALLBACK_CLIENT_RECEIVE:
+            if (len == 0) {
+                lwsl_user("零数据!\n");
+                break;
+            }
             if (NULL != wsi_user && NULL != wsi_user->parse_json) {
                 wsi_user->parse_json(in);
+                if (strcmp("okex", wsi_user->name) == 0) {
+                    // 不要发送二进制文件。
+                    break;
+                }
             }
 
             /* if no clients, just drop incoming */
@@ -264,7 +273,6 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
         default:
             break;
     }
-
     return 0;
 }
 
@@ -274,6 +282,7 @@ connect_all(const struct per_vhost_data__minimal *vhd) {
     execute_connect(vhd, bitfinex_connect_client);
     execute_connect(vhd, kraken_connect_client);
     execute_connect(vhd, okex_connect_client);
+    execute_connect(vhd, bitstamp_connect_client);
 }
 
 void
