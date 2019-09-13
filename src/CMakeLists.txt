@@ -11,4 +11,4 @@ add_executable(ccxs
         bitstamp/bitstamp.c bitstamp/bitstamp.h)
 
 
-target_link_libraries(ccxs cjson_lib zf_log_lib lws_lib ${ZLIB_LIBRARIES})
+target_link_libraries(ccxs cjson_lib lws_lib ${ZLIB_LIBRARIES})

@@ -1,11 +1,20 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.13)
 project(ccxs C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "-Wall -Wextra  -std=c11")
 #-Werror
-find_package(openssl REQUIRED)
+
 find_package(ZLIB REQUIRED)
+
+find_package(OpenSSL REQUIRED)
+if (OpenSSL_FOUND)
+    include_directories(${OPENSSL_INCLUDE_DIRS})
+    link_directories(${OPENSSL_LIBRARIES})
+    message(STATUS "Using OpenSSL include ${OPENSSL_INCLUDE_DIRS}")
+    message(STATUS "Using OpenSSL libraries ${OPENSSL_LIBRARIES}")
+    message(STATUS "Using OpenSSL ${OPENSSL_VERSION}")
+endif ()
 
 if (APPLE)
     message(STATUS "APPLE=${APPLE}")
@@ -17,19 +26,15 @@ if (APPLE)
     include_directories(${OPENSSL_INCLUDE_DIRS})
 endif ()
 
-add_library(zf_log_lib STATIC IMPORTED)
-set_target_properties(zf_log_lib PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/install/zf_log/0.4.0/lib/libzf_log.a)
+add_library(cjson_lib SHARED IMPORTED)
+set_target_properties(cjson_lib PROPERTIES IMPORTED_LOCATION /build/install/cJSON/1.7.11/lib/libcjson.a)
 
-add_library(cjson_lib STATIC IMPORTED)
-set_target_properties(cjson_lib PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/install/cJSON/1.7.11/lib/libcjson.a)
-
-add_library(lws_lib STATIC IMPORTED)
-set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/install/libwebsockets/3.1-stable/lib/libwebsockets.dylib)
+add_library(lws_lib SHARED IMPORTED)
+set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION /build/install/libwebsockets/3.1.0/lib/libwebsockets.so)
 
 include_directories(
-        ${PROJECT_SOURCE_DIR}/install/zf_log/0.4.0/include
-        ${PROJECT_SOURCE_DIR}/install/cJSON/1.7.11/include
-        ${PROJECT_SOURCE_DIR}/install/libwebsockets/3.1-stable/include
+        /build/install/cJSON/1.7.11/include
+        /build/install/libwebsockets/3.1.0/include
 )
 
 add_subdirectory(src)

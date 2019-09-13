@@ -2,7 +2,6 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#include <pthread.h>
 
 #include "cjson/cJSON.h"
 #include "binance/binance.h"
@@ -18,12 +17,6 @@ static const struct lws_protocols client_protocols[] = {
         {NULL, NULL, 0, 0, 0, NULL, 0}
 };
 
-static void
-sigint_handler(int sig) {
-    lwsl_user("LWS sigint received sig=%d\n", sig);
-    interrupted = 1;
-}
-
 int main() {
     struct lws_context_creation_info info;
     struct lws_context *context;
@@ -34,8 +27,6 @@ int main() {
     /* | LLL_INFO */ /* | LLL_PARSER */ /* | LLL_HEADER */
     /* | LLL_EXT */ /* | LLL_CLIENT */ /* | LLL_LATENCY */
     /* | LLL_DEBUG */;
-
-    signal(SIGINT, sigint_handler);
 
     lws_set_log_level(logs, NULL);
     lwsl_user("ccxs 你好！\n");
