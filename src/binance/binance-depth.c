@@ -55,7 +55,7 @@ int end(cJSON *node_to_free, int status) {
     return status;
 }
 
-int binance_parse_depth_update(const char *const json_string) {
+int binance_parse_depth_update(struct per_vhost_data__minimal *vhd, const char *const json_string) {
     clock_t t_0 = clock();
     int status = 0;
     cJSON *root_node = cJSON_Parse(json_string);
@@ -90,7 +90,19 @@ int binance_parse_depth_update(const char *const json_string) {
 
 
     double t_1 = ((double) clock() - t_0) / CLOCKS_PER_SEC; // in seconds
-    ZF_LOGI("Done in %f seconds bids=%d, asks=%d\n", t_1, bids, asks);
+
+
+    char string_json[500];
+    memset(string_json, 0, sizeof string_json);
+    sprintf(string_json, "time:%f, exchange:%s, market:%s, bid:%f, ask:%f, delay:%f",
+            order_book->time,
+            order_book->exchange,
+            strlen(order_book->market_name) > 0 ? order_book->market_name : "?",
+            bids > 0 ? order_book->bids[0].price : -1,
+            asks > 0 ? order_book->asks[0].price : -1,
+            t_1
+    );
+    ZF_LOGI("Done in %f seconds bids=%d, asks=%d, json%s\n", t_1, bids, asks, string_json);
     free(order_book);
     return end(root_node, status);
 }
