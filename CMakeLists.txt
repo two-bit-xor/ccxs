@@ -26,26 +26,27 @@ else ()
     endif ()
 endif ()
 
-if (NOT DEFINED $ENV{ROOT_WORKING_DIR})
-    set($ENV{ROOT_WORKING_DIR}, "/build")
-    message(STATUS "Setting ROOT_WORKING_DIR $ENV{ROOT_WORKING_DIR}")
+if (DEFINED ENV{ROOT_WORKING_DIR})
+    set(DEPENDENCY_BASE_DIR $ENV{ROOT_WORKING_DIR})
+else ()
+    set(DEPENDENCY_BASE_DIR /build)
 endif ()
 
-message(STATUS "Using ROOT_WORKING_DIR $ENV{ROOT_WORKING_DIR}")
+message(STATUS "Using DEPENDENCY_BASE_DIR ${DEPENDENCY_BASE_DIR}")
 add_library(cjson_lib SHARED IMPORTED)
-set_target_properties(cjson_lib PROPERTIES IMPORTED_LOCATION $ENV{ROOT_WORKING_DIR}/install/cJSON/1.7.11/lib/libcjson.a)
+set_target_properties(cjson_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/cJSON/1.7.11/lib/libcjson.a)
 
 add_library(lws_lib SHARED IMPORTED)
 
 if (APPLE)
-    set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION $ENV{ROOT_WORKING_DIR}/install/libwebsockets/3.1.0/lib/libwebsockets.dylib)
+    set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/libwebsockets/3.1.0/lib/libwebsockets.dylib)
 else ()
-    set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION $ENV{ROOT_WORKING_DIR}/install/libwebsockets/3.1.0/lib/libwebsockets.so)
+    set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/libwebsockets/3.1.0/lib/libwebsockets.so)
 endif ()
 
 include_directories(
-        $ENV{ROOT_WORKING_DIR}/install/cJSON/1.7.11/include
-        $ENV{ROOT_WORKING_DIR}/install/libwebsockets/3.1.0/include
+        ${DEPENDENCY_BASE_DIR}/install/cJSON/1.7.11/include
+        ${DEPENDENCY_BASE_DIR}/install/libwebsockets/3.1.0/include
 )
 
 add_subdirectory(src)
