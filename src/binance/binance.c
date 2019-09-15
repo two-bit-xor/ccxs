@@ -20,6 +20,6 @@ binance_connect_client(const struct per_vhost_data__minimal *vhd) {
     struct client_user_data *userdata = malloc(sizeof(struct client_user_data));
     userdata->name = "binance";
     userdata->subscribe = NULL;
-    userdata->parse_json = binance_parse;
+    userdata->parse_json = (char *(*)(const void *const)) binance_parse;
     return connect_client(vhd, 9443, "stream.binance.com", "/ws/btcusdt@depth", userdata);
 }

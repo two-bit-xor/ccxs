@@ -14,7 +14,7 @@ connect_client(const struct per_vhost_data__minimal *vhd, const int port, const 
     i.host = address;
     i.origin = address;
     i.ssl_connection = LCCSCF_USE_SSL;
-    i.pwsi = &vhd->client_wsi;
+    i.pwsi = (struct lws **) (&vhd->client_wsi);
     i.userdata = userdata;
 
     return !lws_client_connect_via_info(&i);

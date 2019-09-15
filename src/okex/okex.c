@@ -12,7 +12,7 @@
 
 // 看到 https://github.com/okcoin-okex/open-api-v3-sdk
 
-static int
+static void
 okex_subscribe(struct lws *wsi_in) {
     lwsl_user("%s: 订阅\n", __func__);
     const char *m = "{\"op\": \"subscribe\", \"args\": [\"spot/optimized_depth:BTC-USDT\"]}";

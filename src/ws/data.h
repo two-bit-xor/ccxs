@@ -6,7 +6,7 @@
 struct client_user_data {
     const char *name; /* should be a constant */
 
-    int (*subscribe)(struct lws *wsi);
+    void (*subscribe)(struct lws *wsi);
 
     char *(*parse_json)(const void *const in);
 };
