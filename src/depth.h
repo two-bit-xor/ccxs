@@ -12,19 +12,26 @@ typedef struct order {
 #endif //EMPTY_ORDER
 
 typedef struct {
-    char exchange[20];
+    // 兑换所
+    char *exchange;
     // 交易对
-    char market_name[20];
+    char *market_name;
     double market;
     // 时间戳
     double time;
     // 潜伏
     long latency;
     long id;
-    // 买单
+
+    unsigned int bids_length;
+    // 出价：买方深度
     Order bids[100];
-    // 卖单
+    unsigned int asks_length;
+    // 问：卖家深度
     Order asks[100];
 } OrderBookLevel2;
+
+void
+orderbook_delete(OrderBookLevel2 *order_book);
 
 #endif //CJSON_EXAMPLE_DEPTH_H

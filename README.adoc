@@ -12,7 +12,7 @@ C语言加密货币交换库。
 
 |binance
 |&#x2714;
-|&#x2715;
+|&#x2714;/&#x2715;
 
 |bitfinex
 |&#x2714;
@@ -31,3 +31,26 @@ C语言加密货币交换库。
 |&#x2715;
 
 |===
+
+== 如何用 Docker
+. `cd docker-build`
+. `docker build -t my-gcc .`
+. `docker run -it --rm -v "$PWD/..":/usr/src/app -p 7681:7681 my-gcc`
+. 内 Docker:
+.. `mkdir buildbox && cd buildbox`
+.. `cmake ..`
+.. `make`
+.. `ctest`
+.. `./src/ccxs`
+
+
+== 如何用
+. `cd docker-build`
+. `export CMAKE_C_COMPILER=...`
+. `export CMAKE_CXX_COMPILER=...`
+. `export ROOT_WORKING_DIR=$(pwd)/../build`
+. `./pre-build.sh`
+. `cmake ..`
+. `make`
+. `ctest`
+. `../src/ccxs`

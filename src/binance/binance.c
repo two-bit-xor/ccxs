@@ -12,6 +12,9 @@
 static char *
 binance_parse(const char *const json_string) {
     lwsl_user("%s: json: %s\n", __func__, json_string);
+    OrderBookLevel2 *book = binance_parse_depth_update(json_string);
+    lwsl_user("%s: done. %s\n", __func__, book->market_name);
+    orderbook_delete(book);
     return NULL;
 }
 
@@ -21,5 +24,5 @@ binance_connect_client(const struct per_vhost_data__minimal *vhd) {
     userdata->name = "binance";
     userdata->subscribe = NULL;
     userdata->parse_json = (char *(*)(const void *const)) binance_parse;
-    return connect_client(vhd, 9443, "stream.binance.com", "/ws/btcusdt@depth", userdata);
+    return connect_client(vhd, 9443, "stream.binance.com", "/ws/btcusdt@depth20@100ms", userdata);
 }
