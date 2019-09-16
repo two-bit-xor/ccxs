@@ -6,7 +6,6 @@ set(CMAKE_C_FLAGS "-Wall -Wextra -Werror -std=c11")
 
 find_package(ZLIB REQUIRED)
 
-
 if (APPLE)
     message(STATUS "APPLE=${APPLE}")
     set(OPENSSL_ROOT_DIR "/usr/local/opt/openssl")
@@ -33,11 +32,10 @@ else ()
 endif ()
 
 message(STATUS "Using DEPENDENCY_BASE_DIR ${DEPENDENCY_BASE_DIR}")
-add_library(cjson_lib SHARED IMPORTED)
+add_library(cjson_lib STATIC IMPORTED)
 set_target_properties(cjson_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/cJSON/1.7.11/lib/libcjson.a)
 
 add_library(lws_lib SHARED IMPORTED)
-
 if (APPLE)
     set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/libwebsockets/3.1.0/lib/libwebsockets.dylib)
 else ()
@@ -50,5 +48,22 @@ include_directories(
 )
 
 add_subdirectory(src)
+
+list(APPEND CMAKE_MODULE_PATH "${DEPENDENCY_BASE_DIR}/cmocka/cmake/Modules/")
+
+option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" FALSE)
+
+if (ENABLE_COVERAGE)
+    add_compile_options(--coverage -O0 -g)
+endif ()
+
+option(ENABLE_TESTS "Perform unit tests after build" ON)
+include(AddCMockaTest)
+enable_testing()
+
+add_library(cmocka_lib STATIC IMPORTED)
+set_target_properties(cmocka_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/cmocka/1.1.5/lib/libcmocka-static.a)
+
+include_directories(${DEPENDENCY_BASE_DIR}/install/cmocka/1.1.5/include)
 
 add_subdirectory(test)

@@ -71,6 +71,7 @@ wget https://gitlab.com/cmocka/cmocka/-/archive/cmocka-${CMOCKA_VERSION}/cmocka-
         -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} \
         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
         -DCMAKE_INSTALL_PREFIX=${ROOT_WORKING_DIR}/install/cmocka/${CMOCKA_VERSION} \
+        -DWITH_STATIC_LIB=On \
         -DCMAKE_BUILD_TYPE=Debug && \
     make install
 
