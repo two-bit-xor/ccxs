@@ -13,8 +13,10 @@ static char *
 binance_parse(const char *const json_string) {
     lwsl_user("%s: json: %s\n", __func__, json_string);
     OrderBookLevel2 *book = binance_parse_depth_update(json_string);
-    lwsl_user("%s: done. %s\n", __func__, book->market_name);
-    orderbook_delete(book);
+    if (book != NULL) {
+        lwsl_user("%s: done. %s\n", __func__, book->market_name);
+        orderbook_delete(book);
+    }
     return NULL;
 }
 

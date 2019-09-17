@@ -6,6 +6,8 @@
 #include "bitfinex.h"
 #include "../ws/client-server-protocol.h"
 #include "../ws/client-connect.h"
+#include "../depth.h"
+#include "bitfinex-depth.h"
 
 static void
 bitfinex_subscribe(struct lws *wsi_in) {
@@ -17,6 +19,11 @@ bitfinex_subscribe(struct lws *wsi_in) {
 static char *
 bitfinex_parse(const char *const json_string) {
     lwsl_user("%s: json: %s\n", __func__, json_string);
+    OrderBookLevel2 *book = bitfinex_parse_depth_update(json_string);
+    if (book != NULL) {
+        lwsl_user("%s: done. %s\n", __func__, book->market_name);
+        orderbook_delete(book);
+    }
     return NULL;
 }
 

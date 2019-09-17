@@ -128,8 +128,9 @@ callback_minimal(struct lws *wsi, enum lws_callback_reasons reason,
 
         case LWS_CALLBACK_SERVER_WRITEABLE:
             pmsg = lws_ring_get_element(vhd->ring, &pss->tail);
-            if (!pmsg)
+            if (!pmsg) {
                 break;
+            }
 
             /* notice we allowed for LWS_PRE in the payload already */
             m = lws_write(wsi, ((unsigned char *) pmsg->payload) + LWS_PRE, pmsg->len, LWS_WRITE_TEXT);
@@ -281,7 +282,6 @@ connect_all(const struct per_vhost_data__minimal *vhd) {
     execute_connect(vhd, binance_connect_client);
     execute_connect(vhd, bitfinex_connect_client);
     execute_connect(vhd, kraken_connect_client);
-    execute_connect(vhd, okex_connect_client);
     execute_connect(vhd, bitstamp_connect_client);
 }
 
