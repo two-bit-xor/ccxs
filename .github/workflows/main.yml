@@ -1,0 +1,25 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Create docker build box
+      run: |
+        cd docker-build
+        docker build -t my-gcc
+    - name: CMake
+      run: |
+        docker run -it --rm -v "$PWD/..":/usr/src/app -p 7681:7681 -w /usr/src/app/docker-build my-gcc cmake -D ENABLE_COVERAGE:BOOL=TRUE ..
+    - name: compile
+      run: docker run -it --rm -v "$PWD/..":/usr/src/app -p 7681:7681 -w /usr/src/app/docker-build my-gcc make
+    - name: test
+      run: docker run -it --rm -v "$PWD/..":/usr/src/app -p 7681:7681 -w /usr/src/app/docker-build my-gcc ctest -V
+      
