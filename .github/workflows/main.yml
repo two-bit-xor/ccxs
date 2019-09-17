@@ -9,11 +9,11 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - working-directory: docker-build
     - name: Run a one-line script
       run: echo Hello, world!
     - name: Create docker build box
       run: |
+        pwd
         cd docker-build
         docker build -t my-gcc .
     - name: CMake
