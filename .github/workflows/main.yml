@@ -14,7 +14,7 @@ jobs:
     - name: Create docker build box
       run: |
         cd docker-build
-        docker build -t my-gcc
+        docker build -t my-gcc .
     - name: CMake
       run: |
         docker run -it --rm -v "$PWD/..":/usr/src/app -p 7681:7681 -w /usr/src/app/docker-build my-gcc cmake -D ENABLE_COVERAGE:BOOL=TRUE ..
