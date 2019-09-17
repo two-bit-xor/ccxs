@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-18.04
     
     steps:
+    - working-directory: docker-build
     - uses: actions/checkout@v1
     - name: Run a one-line script
       run: echo Hello, world!
@@ -17,7 +18,7 @@ jobs:
         docker build -t my-gcc .
     - name: CMake
       run: |
-        docker run -it --rm -v "$PWD/..":/usr/src/app -p 7681:7681 -w /usr/src/app/docker-build my-gcc cmake -D ENABLE_COVERAGE:BOOL=TRUE ..
+        docker run -it --rm -v "$(pwd)/..":/usr/src/app -p 7681:7681 -w /usr/src/app/docker-build my-gcc cmake -D ENABLE_COVERAGE:BOOL=TRUE ..
     - name: compile
       run: docker run -it --rm -v "$PWD/..":/usr/src/app -p 7681:7681 -w /usr/src/app/docker-build my-gcc make
     - name: test
