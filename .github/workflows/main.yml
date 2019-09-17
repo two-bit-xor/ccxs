@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-18.04
     
     steps:
-    - working-directory: docker-build
     - uses: actions/checkout@v1
+    - working-directory: docker-build
     - name: Run a one-line script
       run: echo Hello, world!
     - name: Create docker build box
