@@ -32,7 +32,7 @@ else ()
 endif ()
 
 message(STATUS "Using DEPENDENCY_BASE_DIR ${DEPENDENCY_BASE_DIR}")
-add_library(cjson_lib STATIC IMPORTED)
+add_library(cjson_lib STATIC IMPORTED test/bitstamp/test-bitstamp-depth.c)
 set_target_properties(cjson_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/cJSON/1.7.11/lib/libcjson.a)
 
 add_library(lws_lib SHARED IMPORTED)

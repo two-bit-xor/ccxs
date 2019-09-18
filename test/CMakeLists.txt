@@ -35,3 +35,12 @@ add_cmocka_test(test_bitfinex_depth
         ${COMMON_SOURCES}
         LINK_LIBRARIES ${TEST_LIBS}
         LINK_OPTIONS --coverage)
+
+add_cmocka_test(test_bitstamp
+        SOURCES
+        ${PROJECT_SOURCE_DIR}/test/bitstamp/test-bitstamp-depth.c
+        ${PROJECT_SOURCE_DIR}/src/bitstamp/bitstamp-depth.c
+        ${PROJECT_SOURCE_DIR}/src/bitstamp/bitstamp-depth.h
+        ${COMMON_SOURCES}
+        LINK_LIBRARIES ${TEST_LIBS}
+        LINK_OPTIONS --coverage)
