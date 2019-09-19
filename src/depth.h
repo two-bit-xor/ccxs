@@ -1,5 +1,5 @@
-#ifndef CJSON_EXAMPLE_DEPTH_H
-#define CJSON_EXAMPLE_DEPTH_H
+#ifndef CCXS_DEPTH_H
+#define CCXS_DEPTH_H
 
 // 单
 typedef struct order {
@@ -34,4 +34,4 @@ typedef struct {
 void
 orderbook_delete(OrderBookLevel2 *order_book);
 
-#endif //CJSON_EXAMPLE_DEPTH_H
+#endif //CCXS_DEPTH_H

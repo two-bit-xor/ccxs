@@ -1,5 +1,5 @@
-#ifndef CJSON_EXAMPLE_CLIENT_SERVER_PROTOCOL_H
-#define CJSON_EXAMPLE_CLIENT_SERVER_PROTOCOL_H
+#ifndef CCXS_CLIENT_SERVER_PROTOCOL_H
+#define CCXS_CLIENT_SERVER_PROTOCOL_H
 
 #include <libwebsockets.h>
 
@@ -24,4 +24,4 @@ ring_buffer_insert(struct lws *wsi, char *message);
                 0, NULL, 0 \
         }
 
-#endif //CJSON_EXAMPLE_CLIENT_SERVER_PROTOCOL_H
+#endif //CCXS_CLIENT_SERVER_PROTOCOL_H

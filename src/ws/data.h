@@ -1,5 +1,5 @@
-#ifndef CJSON_EXAMPLE_DATA_H
-#define CJSON_EXAMPLE_DATA_H
+#ifndef CCXS_DATA_H
+#define CCXS_DATA_H
 
 #include <libwebsockets.h>
 
@@ -39,4 +39,4 @@ struct per_vhost_data__minimal {
     struct lws *client_wsi;
 };
 
-#endif //CJSON_EXAMPLE_DATA_H
+#endif //CCXS_DATA_H
