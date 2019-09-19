@@ -10,7 +10,7 @@
 
 static void
 test_binance_parse_depth_update_btcusd() {
-    char *depth_json = read_file("resources/test-binance-depth20-100ms.json", 2306);
+    char *depth_json = read_file("resources/binance-depth20-100ms.json", 2306);
     OrderBookLevel2 *actual = binance_parse_depth_update(depth_json);
     assert_string_equal(actual->exchange, "binance");
     assert_string_equal(actual->market_name, "BTC-USD");

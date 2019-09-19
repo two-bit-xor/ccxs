@@ -10,21 +10,21 @@
 
 static void
 test_binance_parse_info() {
-    char *depth_json = read_file("resources/test-bitfinex-info.json", 103);
+    char *depth_json = read_file("resources/bitfinex-info.json", 103);
     OrderBookLevel2 *actual = bitfinex_parse_depth_update(depth_json);
     assert_null(actual);
 }
 
 static void
 test_binance_parse_subbed() {
-    char *depth_json = read_file("resources/test-bitfinex-subbed.json", 125);
+    char *depth_json = read_file("resources/bitfinex-subbed.json", 125);
     OrderBookLevel2 *actual = bitfinex_parse_depth_update(depth_json);
     assert_null(actual);
 }
 
 static void
 test_binance_parse_depth_snapshot_btcusd() {
-    char *depth_json = read_file("resources/test-bitfinex-snapshot.json", 973);
+    char *depth_json = read_file("resources/bitfinex-snapshot.json", 973);
     OrderBookLevel2 *actual = bitfinex_parse_depth_update(depth_json);
     assert_string_equal(actual->exchange, "bitfinex");
     assert_string_equal(actual->market_name, "BTC-USD");
@@ -42,7 +42,7 @@ test_binance_parse_depth_snapshot_btcusd() {
 
 static void
 test_binance_parse_depth_update_btcusd() {
-    char *depth_json = read_file("resources/test-bitfinex-update.json", 22);
+    char *depth_json = read_file("resources/bitfinex-update.json", 22);
     OrderBookLevel2 *actual = bitfinex_parse_depth_update(depth_json);
     assert_string_equal(actual->exchange, "bitfinex");
     assert_string_equal(actual->market_name, "BTC-USD");
