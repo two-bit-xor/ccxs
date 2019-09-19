@@ -10,7 +10,7 @@ add_executable(ccxs
         binance/binance.c binance/binance.h binance/binance-depth.c binance/binance-depth.h
         bitfinex/bitfinex.c bitfinex/bitfinex.h bitfinex/bitfinex-depth.c bitfinex/bitfinex-depth.h
         bitstamp/bitstamp.c bitstamp/bitstamp.h bitstamp/bitstamp-depth.c bitstamp/bitstamp-depth.h
-        kraken/kraken.c kraken/kraken.h
+        kraken/kraken.c kraken/kraken.h kraken/kraken-depth.c kraken/kraken-depth.h
         okex/okex.c okex/okex.h
         io/time.c io/time.h)
 
