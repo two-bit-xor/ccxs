@@ -13,13 +13,20 @@ test_binance_parse_info() {
     char *depth_json = read_file("resources/bitfinex-info.json", 103);
     OrderBookLevel2 *actual = bitfinex_parse_depth_update(depth_json);
     assert_null(actual);
+
+    free(depth_json);
+    orderbook_delete(actual);
 }
 
 static void
 test_binance_parse_subbed() {
     char *depth_json = read_file("resources/bitfinex-subbed.json", 125);
     OrderBookLevel2 *actual = bitfinex_parse_depth_update(depth_json);
+
     assert_null(actual);
+
+    free(depth_json);
+    orderbook_delete(actual);
 }
 
 static void
@@ -37,6 +44,7 @@ test_binance_parse_depth_snapshot_btcusd() {
     assert_float_equal(actual->asks[0].price, 10197, 0.01);
     assert_float_equal(actual->asks[0].amount, 0.0053093, 0.01);
 
+    free(depth_json);
     orderbook_delete(actual);
 }
 
@@ -51,6 +59,7 @@ test_binance_parse_depth_update_btcusd() {
     assert_float_equal(actual->asks[0].price, 10222, 0.01);
     assert_float_equal(actual->asks[0].amount, 0, 0.01);
 
+    free(depth_json);
     orderbook_delete(actual);
 }
 

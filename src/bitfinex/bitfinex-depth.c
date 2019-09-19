@@ -26,6 +26,7 @@ bitfinex_parse_depth_update(const char *json_string) {
             const cJSON *version = cJSON_GetObjectItemCaseSensitive(root_node, "version");
             const cJSON *status = cJSON_GetObjectItemCaseSensitive(cJSON_GetObjectItemCaseSensitive(root_node, "platform"), "status");
             lwsl_user("%s Welcome: version=%d status=%d\n", __func__, version->valueint, status->valueint);
+
             cJSON_Delete(root_node);
             return NULL;
         }
@@ -33,6 +34,7 @@ bitfinex_parse_depth_update(const char *json_string) {
             const cJSON *channel_name = cJSON_GetObjectItemCaseSensitive(root_node, "channel");
             const cJSON *channel_id = cJSON_GetObjectItemCaseSensitive(root_node, "chanId");
             lwsl_user("%s subscribed: name=\"%s\" id=%d\n", __func__, channel_name->valuestring, (bitfinex_channel_id = channel_id->valueint));
+
             cJSON_Delete(root_node);
             return NULL;
         }
@@ -40,6 +42,7 @@ bitfinex_parse_depth_update(const char *json_string) {
             const cJSON *message = cJSON_GetObjectItemCaseSensitive(root_node, "msg");
             const cJSON *code = cJSON_GetObjectItemCaseSensitive(root_node, "code");
             lwsl_err("%s subscription failure: msg=\"%s\" code=%d\n", __func__, message->valuestring, code->valueint);
+
             cJSON_Delete(root_node);
             return NULL;
         }
@@ -52,6 +55,7 @@ bitfinex_parse_depth_update(const char *json_string) {
     cJSON *channel_id = cJSON_GetArrayItem(root_node, 0);
     if (bitfinex_channel_id != channel_id->valueint) {
         lwsl_user("%s wrong channel id=%d\n", __func__, channel_id->valueint);
+
         cJSON_Delete(root_node);
         return NULL;
     }
@@ -59,6 +63,7 @@ bitfinex_parse_depth_update(const char *json_string) {
     if (first_element != NULL && cJSON_IsString(first_element) && (first_element->valuestring != NULL)) {
         if (strcmp("hb", first_element->valuestring) == 0) {
             lwsl_user("%s hb received\n", __func__);
+
             cJSON_Delete(root_node);
             return NULL;
         }
@@ -123,6 +128,8 @@ bitfinex_parse_depth_update(const char *json_string) {
             order_book->asks_length > 0 ? order_book->asks[0].price : -1,
             t_1
     );
+
+    cJSON_Delete(root_node);
     lwsl_user("Done in %f seconds - bids=%d, asks=%d, json={%s}\n", t_1, order_book->bids_length, order_book->asks_length, string_json);
     return order_book;
 }

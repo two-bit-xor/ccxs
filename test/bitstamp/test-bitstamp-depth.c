@@ -13,7 +13,10 @@ static void
 test_bitstamp_parse_subbed() {
     char *depth_json = read_file("resources/bitstamp-subbed.json", 84);
     OrderBookLevel2 *actual = bitstamp_parse_depth_update(depth_json);
+
     assert_null(actual);
+
+    free(depth_json);
 }
 
 static void
@@ -27,6 +30,7 @@ test_bitstamp_parse_depth_update_btcusd() {
     assert_float_equal(actual->asks[0].price, 10180.250000, 0.01);
     assert_float_equal(actual->asks[0].amount, 1.8, 0.01);
 
+    free(depth_json);
     orderbook_delete(actual);
 }
 

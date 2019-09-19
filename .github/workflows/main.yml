@@ -15,3 +15,5 @@ jobs:
       run: docker run --rm -v "$GITHUB_WORKSPACE":/usr/src/app -w /usr/src/app/docker-build 2bitxor/my-gcc:0.0.1 make
     - name: CTest
       run: docker run --rm -v "$GITHUB_WORKSPACE":/usr/src/app -w /usr/src/app/docker-build 2bitxor/my-gcc:0.0.1 ctest -V
+    - name: Valgrind
+      run: docker run --rm -v "$GITHUB_WORKSPACE":/usr/src/app -w /usr/src/app/docker-build 2bitxor/my-gcc:0.0.1 ctest -T memcheck

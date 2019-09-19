@@ -79,6 +79,8 @@ binance_parse_depth_update(const char *const json_string) {
             order_book->asks_length > 0 ? order_book->asks[0].price : -1,
             t_1
     );
+
+    cJSON_Delete(root_node);
     lwsl_user("%s: Done in %f seconds - bids=%d, asks=%d, json={%s}\n", __func__, t_1, order_book->bids_length, order_book->asks_length, string_json);
     return order_book;
 }

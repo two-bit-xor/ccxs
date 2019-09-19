@@ -43,11 +43,13 @@ bitstamp_parse_depth_update(const char *json_string) {
     if (type != NULL && cJSON_IsString(type) && type->valuestring != NULL) {
         if (strcmp("bts:subscription_succeeded", type->valuestring) == 0) {
             lwsl_user("%s subscribed: name=\"%s\"\n", __func__, channel_name->valuestring);
+
             cJSON_Delete(root_node);
             return NULL;
         }
         if (strcmp("error", type->valuestring) == 0) {
             lwsl_err("%s error: msg=\"%s\"\n", __func__, json_string);
+
             cJSON_Delete(root_node);
             return NULL;
         }
@@ -86,6 +88,8 @@ bitstamp_parse_depth_update(const char *json_string) {
             order_book->asks_length > 0 ? order_book->asks[0].price : -1,
             t_1
     );
+
+    cJSON_Delete(root_node);
     lwsl_user("Done in %f seconds - bids=%d, asks=%d, json={%s}\n", t_1, order_book->bids_length, order_book->asks_length, string_json);
     return order_book;
 }

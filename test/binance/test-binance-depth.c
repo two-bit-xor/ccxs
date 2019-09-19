@@ -23,6 +23,7 @@ test_binance_parse_depth_update_btcusd() {
     assert_float_equal(actual->asks[0].price, 10303.19000000, 0.01);
     assert_float_equal(actual->asks[0].amount, 0.14510200, 0.01);
 
+    free(depth_json);
     orderbook_delete(actual);
 }
 
