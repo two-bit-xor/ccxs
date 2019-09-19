@@ -22,7 +22,7 @@ C语言加密货币交换库。
 
 |bitstamp
 |&#x2714;
-|&#x2715;
+|&#x2714;/&#x2715;
 
 |kraken
 |&#x2714;
@@ -34,17 +34,14 @@ C语言加密货币交换库。
 
 |===
 
-== 如何用 Docker
+== 运用 Docker
 . `cd docker-build`
 . `docker build -t my-gcc .`
-. `docker run -it --rm -v "$PWD/..":/usr/src/app -p 7681:7681 my-gcc`
-. 内 Docker:
-.. `mkdir buildbox && cd buildbox`
-.. `cmake ..`
-.. `make`
-.. `ctest`
-.. `./src/ccxs`
-
+. `export MY_GCC="docker run --rm -v $PWD/..:/usr/src/app -p 7681:7681 -w /usr/src/app/docker-build my-gcc"
+. `$MY_GCC cmake -D ENABLE_COVERAGE:BOOL=TRUE ..`
+. `$MY_GCC make`
+. `$MY_GCC ctest -V`
+. 运行应用 `$MY_GCC ./src/ccxs`
 
 == 如何用
 . `cd docker-build`
@@ -55,4 +52,4 @@ C语言加密货币交换库。
 . `cmake ..`
 . `make`
 . `ctest`
-. `../src/ccxs`
+. 运行应用 `../src/ccxs`
