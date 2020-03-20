@@ -37,7 +37,7 @@ C语言加密货币交换库。
 == 运用 Docker
 . `cd docker-build`
 . `docker build -t my-gcc .`
-. `export MY_GCC="docker run --rm -v $PWD/..:/usr/src/app -p 7681:7681 -w /usr/src/app/docker-build my-gcc`
+. `export MY_GCC="docker run --rm -v $PWD/..:/usr/src/app -p 7681:7681 -w /usr/src/app/docker-build my-gcc"`
 . `$MY_GCC cmake -D ENABLE_COVERAGE:BOOL=TRUE ..`
 . `$MY_GCC make`
 . `$MY_GCC ctest -V`

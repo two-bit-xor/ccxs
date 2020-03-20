@@ -29,31 +29,28 @@ else ()
     endif ()
 endif ()
 
-if (DEFINED ENV{ROOT_WORKING_DIR})
-    set(DEPENDENCY_BASE_DIR $ENV{ROOT_WORKING_DIR})
-else ()
-    set(DEPENDENCY_BASE_DIR /build)
-endif ()
+set(DEPENDENCY_LIBRARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libraries")
+set(DEPENDENCY_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src-dependencies")
 
-message(STATUS "Using DEPENDENCY_BASE_DIR ${DEPENDENCY_BASE_DIR}")
+message(STATUS "Using DEPENDENCY_LIBRARY_DIR ${DEPENDENCY_LIBRARY_DIR}")
 add_library(cjson_lib STATIC IMPORTED test/bitstamp/test-bitstamp-depth.c)
-set_target_properties(cjson_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/cJSON/${CJSON_VERSION}/lib/libcjson.a)
+set_target_properties(cjson_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_LIBRARY_DIR}/cJSON/${CJSON_VERSION}/lib/libcjson.a)
 
 add_library(lws_lib SHARED IMPORTED)
 if (APPLE)
-    set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/libwebsockets/${LWS_VERSION}/lib/libwebsockets.dylib)
+    set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_LIBRARY_DIR}/libwebsockets/${LWS_VERSION}/lib/libwebsockets.dylib)
 else ()
-    set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/libwebsockets/${LWS_VERSION}/lib/libwebsockets.so)
+    set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_LIBRARY_DIR}/libwebsockets/${LWS_VERSION}/lib/libwebsockets.so)
 endif ()
 
 include_directories(
-        ${DEPENDENCY_BASE_DIR}/install/cJSON/${CJSON_VERSION}/include
-        ${DEPENDENCY_BASE_DIR}/install/libwebsockets/${LWS_VERSION}/include
+        ${DEPENDENCY_LIBRARY_DIR}/cJSON/${CJSON_VERSION}/include
+        ${DEPENDENCY_LIBRARY_DIR}/libwebsockets/${LWS_VERSION}/include
 )
 
 add_subdirectory(src)
 
-list(APPEND CMAKE_MODULE_PATH "${DEPENDENCY_BASE_DIR}/cmocka/cmake/Modules/")
+list(APPEND CMAKE_MODULE_PATH "${DEPENDENCY_SOURCE_DIR}/cmocka/cmake/Modules/")
 
 option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" FALSE)
 
@@ -66,8 +63,8 @@ include(AddCMockaTest)
 enable_testing()
 
 add_library(cmocka_lib STATIC IMPORTED)
-set_target_properties(cmocka_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/cmocka/${CMOCKA_VERSION}/lib/libcmocka-static.a)
+set_target_properties(cmocka_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_LIBRARY_DIR}/cmocka/${CMOCKA_VERSION}/lib/libcmocka-static.a)
 
-include_directories(${DEPENDENCY_BASE_DIR}/install/cmocka/${CMOCKA_VERSION}/include)
+include_directories(${DEPENDENCY_LIBRARY_DIR}/cmocka/${CMOCKA_VERSION}/include)
 
 add_subdirectory(test)
