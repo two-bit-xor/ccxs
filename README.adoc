@@ -49,7 +49,10 @@ C语言加密货币交换库。
 . `export CMAKE_CXX_COMPILER=...`
 . `export ROOT_WORKING_DIR=$(pwd)/../build`
 . `./pre-build.sh`
-. `cmake ..`
+. `rm -rf build`
+. `mkdir build`
+. `cd build`
+. `cmake ../..`
 . `make`
 . `ctest`
-. 运行应用 `../src/ccxs`
+. 运行应用 `src/ccxs`

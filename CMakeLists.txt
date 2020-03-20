@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.13)
 project(ccxs C)
 
+set(CJSON_VERSION "1.7.12")
+set(LWS_VERSION "4.0.1")
+set(CMOCKA_VERSION "1.1.5")
+
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "-Wall -Wextra -Werror -std=c11")
 
@@ -33,18 +37,18 @@ endif ()
 
 message(STATUS "Using DEPENDENCY_BASE_DIR ${DEPENDENCY_BASE_DIR}")
 add_library(cjson_lib STATIC IMPORTED test/bitstamp/test-bitstamp-depth.c)
-set_target_properties(cjson_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/cJSON/1.7.11/lib/libcjson.a)
+set_target_properties(cjson_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/cJSON/${CJSON_VERSION}/lib/libcjson.a)
 
 add_library(lws_lib SHARED IMPORTED)
 if (APPLE)
-    set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/libwebsockets/3.1.0/lib/libwebsockets.dylib)
+    set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/libwebsockets/${LWS_VERSION}/lib/libwebsockets.dylib)
 else ()
-    set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/libwebsockets/3.1.0/lib/libwebsockets.so)
+    set_target_properties(lws_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/libwebsockets/${LWS_VERSION}/lib/libwebsockets.so)
 endif ()
 
 include_directories(
-        ${DEPENDENCY_BASE_DIR}/install/cJSON/1.7.11/include
-        ${DEPENDENCY_BASE_DIR}/install/libwebsockets/3.1.0/include
+        ${DEPENDENCY_BASE_DIR}/install/cJSON/${CJSON_VERSION}/include
+        ${DEPENDENCY_BASE_DIR}/install/libwebsockets/${LWS_VERSION}/include
 )
 
 add_subdirectory(src)
@@ -62,8 +66,8 @@ include(AddCMockaTest)
 enable_testing()
 
 add_library(cmocka_lib STATIC IMPORTED)
-set_target_properties(cmocka_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/cmocka/1.1.5/lib/libcmocka-static.a)
+set_target_properties(cmocka_lib PROPERTIES IMPORTED_LOCATION ${DEPENDENCY_BASE_DIR}/install/cmocka/${CMOCKA_VERSION}/lib/libcmocka-static.a)
 
-include_directories(${DEPENDENCY_BASE_DIR}/install/cmocka/1.1.5/include)
+include_directories(${DEPENDENCY_BASE_DIR}/install/cmocka/${CMOCKA_VERSION}/include)
 
 add_subdirectory(test)
