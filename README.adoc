@@ -45,9 +45,8 @@ C语言加密货币交换库。
 
 == 如何用
 . `cd docker-build`
-. `export CMAKE_C_COMPILER=...`
-. `export CMAKE_CXX_COMPILER=...`
-. `export ROOT_WORKING_DIR=$(pwd)/../build`
+. `export CMAKE_C_COMPILER=<C COMPILER PATH>`
+. `export CMAKE_CXX_COMPILER=<CXX COMPILER PATH>`
 . `./pre-build.sh`
 . `rm -rf build`
 . `mkdir build`

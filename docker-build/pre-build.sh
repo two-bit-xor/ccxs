@@ -2,12 +2,18 @@
 
 echo "CMAKE_C_COMPILER=${CMAKE_C_COMPILER}"
 echo "CMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}"
+echo "DEPENDENCY_BASE_DIR=${DEPENDENCY_BASE_DIR}"
+
+if [[ -z "${DEPENDENCY_BASE_DIR}" ]]
+then
+    export DEPENDENCY_BASE_DIR=$(pwd)/..
+fi
 
 export CJSON_VERSION=1.7.12
 export LWS_VERSION=4.0.1
 export CMOCKA_VERSION=1.1.5
-export SOURCE_DIR=$(pwd)/../src-dependencies
-export LIBS_DIR=$(pwd)/../libraries
+export SOURCE_DIR=${DEPENDENCY_BASE_DIR}/src-dependencies
+export LIBS_DIR=${DEPENDENCY_BASE_DIR}/libraries
 
 echo "SOURCE_DIR=${SOURCE_DIR}"
 if [[ -d "${SOURCE_DIR}" ]]
